@@ -1,53 +1,37 @@
 def process_file(file_name):
-    """
-    Given a file name, returns a list of lists [name, gender, births]
-    HINT: https://stackoverflow.com/a/35340988/941742
-
-    :param file_name: a string
-    :return: a list of lists, [[name1, gender1, births1], [name2, gender2, births2]...]
-
-    Example:
-    process_file('yob1880.txt')
-        will return
-    [["Mary","F",7065], ["Anna","F",2604],...]
-
-    """
-    pass  # delete this line and replace with your code here
-
+    names_catalog = [] 
+    babes = open("babynames/" + file_name)
+    name_catalog = [line.strip('\n').split(',') for line in babes if line != '']
+    return name_catalog
 
 def total_births(year):
-    """
-
-    :param year: an integer, between 1880 and 2010
-    :return: an integer, the total births of all the babies in that year
-    """
-    pass  # delete this line and replace with your code here
-
+    analyzed_year = str(year)
+    births = 0
+    for years in process_file('yob' + analyzed_year + '.txt'):
+        births += int(years[2])
+    return births
 
 def proportion(name, gender, year):
-    """
-
-    :param name: a string, first name
-    :param gender: a string, "F" or "M"
-    :param year: an integer, between 1880 and 2010
-    :return: a floating number, the proportion of babies with the given name to total births in given year
-    """
-    pass  # delete this line and replace with your code here
+    analyzed_year = str(year)
+    proport = 0
+    for years in process_file('yob' + analyzed_year + '.txt'):
+        if years[0].lower() == name.lower() and years[1] == gender:
+            proport = int(years[2]) / total_births(year)
+    return proport
 
 
 def highest_year(name, gender):
-    """
-
-    :param name: a string
-    :param gender: a string, "F" or "M"
-    :return: an integer, the year when the given name has the highest proportion over the years (among all the proportions of the same name in different years)
-    """
-    pass  # delete this line and replace with your code here
+    highest = 0
+    largest_year= 0
+    for year in range(1880, 2011):
+        if proportion(name, gender, year) > highest:
+            highest = proportion(name, gender, year)
+            largest_year = year
+    return largest_year
 
 
 def main():
-    pass  # delete this line and replace with your code here
-
+    print('Waylon had the highest proportion among male baby names in the year', highest_year('Waylon', 'M'))
 
 if __name__ == '__main__':
     main()
